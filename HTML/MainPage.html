@@ -3,6 +3,7 @@
 	<head>
 		<meta charset = "UTF-8">
 		<script type = "text/javascript" src = "http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="../Javascript/Chart.js"></script>
 		<script type = "text/javascript" src = "../Javascript/bootstrap.js"></script>
 		<script type = "text/javascript" src = "../Javascript/bootstrap.min.js"></script>
 		<script type = "text/javascript" src = "../Javascript/MainPage.js"></script>
@@ -11,23 +12,25 @@
 		<title>QuickCut</title>
 	</head>
 	<body>
-		<div id = "title"><img id = "logo" src = "../img/Logo.png" align="middle"><div id = "notify"></div></div>
+		<div id = "title"></div></div>
 		<div id = "login">Login: <div id = "login_results"></div>
 			<input id = "username_login" type = "text" value = "username"/>
 			<input id = "password_login" type = "password" value = "password"/>
-			<button id = "login_button" onclick = "login('', '')">Login</button>
-			<button id = "create_acc_button" onclick = "create_acc()">Create Account</button>
+			<button id = "login_button" onclick = "login('', '')">Login </button>
+			<button id = "create_acc_button" onclick = "create_acc()">Create Account </button>
 		</div>
 		<div id = "Goals"></div>
-		<div id = "Diary"></div>		
+		<div id = "Diary"></div>
+		<div id = "Graphs"></div>		
 		<div id = "search_field_div">
 				<br>
 				<br>
 				Search for a food:
 				<br>
 				<input id = "search_field" type = "text" value = "Search for Food"/>
-				<button id = "search_button" onclick = "search(false)">Search</button>				
+				<button id = "search_button" onclick = "search(false)">Search </button>				
 		</div>
 				<div id = "results"></div>
 	</body>
+	
 </html>

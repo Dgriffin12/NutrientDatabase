@@ -22,6 +22,13 @@ label{
 }
 body{
 	text-align:center;
+    background-image: url('../img/Logo_real3.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size:100%;
+}
+td{
+	background-color:white;
 }
 #login{
 	margin:0 auto;
@@ -35,8 +42,18 @@ body{
 #search_field_div{
 	margin:0 auto;
 }
+th{
+	font-family: georgia;
+	background: -webkit-gradient(linear, center top, center bottom, from(#BDFCC9), to(#FFFFFF0));
+	background: -webkit-linear-gradient(#BDFCC9, #FFFFFF);
+	background: -moz-linear-gradient(#BDFCC9, #FFFFFF);
+	background: -o-linear-gradient(#BDFCC9, #FFFFFF);
+	background: -ms-linear-gradient(#BDFCC9, #FFFFFF);
+	background: linear-gradient(#BDFCC9, #FFFFFF);
+}
 table{
 	margin:0 auto;
+	
 }
 #search_field{
 	margin-top:0px;
@@ -56,12 +73,29 @@ table{
 }
 button{
 	margin-top:3px;
-	margin-bottom:3px;
+	margin-bottom:5px;
+	height:25px;
+	width:100px;
+	color: black;
+	font-family: georgia;
+	font-style: bold;
+	font-size: 15px;
+	letter-spacing: 0.07em;
+	background: -webkit-gradient(linear, center top, center bottom, from(#BDFCC9), to(#FFFFFF0));
+	background: -webkit-linear-gradient(#BDFCC9, #FFFFFF);
+	background: -moz-linear-gradient(#BDFCC9, #FFFFFF);
+	background: -o-linear-gradient(#BDFCC9, #FFFFFF);
+	background: -ms-linear-gradient(#BDFCC9, #FFFFFF);
+	background: linear-gradient(#BDFCC9, #FFFFFF);
+}
+#graphs_button {
+	width: 200px;
 }
 input{
 	margin-top:0px;
 	margin-bottom:0px;
 }
-th{
-	
+#title{
+	height:188px;
 }
+

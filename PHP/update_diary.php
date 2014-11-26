@@ -5,16 +5,32 @@
 	if (mysqli_connect_errno()) {
   		echo "Failed to connect to MySQL: " . mysqli_connect_error();
 	}
-	
+	date_default_timezone_set('America/Los_Angeles');
 	mysqli_select_db($con,"nutrient_database");
 	$username = $_GET['username'];
-	date_default_timezone_set('America/Los_Angeles');
-	$date = date('Y') . '-' . date('m') . '-' . date('d');
-	$result_first = mysqli_query($con, "SELECT * FROM diary_entry WHERE username LIKE '" . $username . "' AND date LIKE '" . $date ."'");
+	$day = $_GET['day'];
+	if($day != 0)
+	{
+		$date = new DateTime;
+		date_add($date, date_interval_create_from_date_string('' . $day . 'days'));
+		$date_string = $date->format('Y-m-d');
+	}else
+	{
+		$date = new DateTime('now');
+		$date_string = $date->format('Y-m-d');
+	}
+	
+	
+	$result_first = mysqli_query($con, "SELECT * FROM diary_entry WHERE username LIKE '" . $username . "' AND date LIKE '" . $date_string ."'");
 	$result_goals = mysqli_query($con, "SELECT goal_calories, goal_protein, goal_fat, goal_carbs FROM users WHERE username LIKE '" . $username . "'");
-	echo "<table id = 'Diary_Entries_Table' border = '1'>
+	
+	echo "<button id = 'subtract_day' onclick = 'subtract_day()' >Previous Day</button>
+	" . " " . $date->format('F j, Y') . " " . "
+	<button id = 'add_day' onclick = 'add_day()'>Next Day</button>
+	<table id = 'Diary_Entries_Table' border = '1'>
 	<tr>
 	<th>Food Diary Entries: </th>
+	
 	</tr>";
 	$total_fat = 0;
 	$total_protein = 0;
@@ -72,10 +88,16 @@
 			$fat_goal = $row_goal['goal_fat'];
 		}
 	}
+
+	//Calculate Totals, less already consumed.
 	$calories_less_goal = $calories_goal - $total_calories;
 	$fat_less_goal = $fat_goal - $total_fat;
 	$protein_less_goal = $protein_goal - $total_protein;
 	$carbs_less_goal = $carb_goal - $total_carbs;
+	//Calculate % of Daily Calories
+	$fat_percent;
+	$carbs_percent;
+	$protein_percent;
 	
 	echo "</table>";
 	echo "<table id = 'Daily_Intake_Table' border = '2'><tr><th>Nutrients</th><th>Daily Totals</th><th> Daily Goal</th><th>Amount Left</th></tr>";

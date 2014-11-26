@@ -1,6 +1,7 @@
 var search_string = ""; //global for nutrition facts knowing the name, rather than querying for it.
 var logged_in = false; //global for knowing if a user is logged in
 var cur_user = ""; //global user_name
+var cur_day = 0;
 
 //sets on click events and attempts to login off of a cookie.
 $(document).ready(function(){	
@@ -54,12 +55,15 @@ function search(data){
   xmlhttp.open("GET","../PHP/search.php?q=" + search_string + "&k="+ logged_in,true);
   xmlhttp.send();
   $("#search_field").val("Search for Food");
+  set_on_clicks();
+  $(".long_desc_data").css("width", "500px");
 }
 
 //login function, gets rid of cookie if there is one and reinstantiates a new cookie for this login.
 function login(acc, pw){
 	var username;
 	var password;
+	cur_day = 0;
 	if(acc === "" || pw === "")
 	{
 		username = $("#username_login").val();
@@ -90,6 +94,7 @@ function login(acc, pw){
 				$("#notify").html("Logged in as "+ array['username'] + '.');
 				$("#login").html('<button id = "logout_button" onclick = "logout()">Logout</button>');
 				$("#Goals").html('<button id = "goals_button" onclick = "view_goals()">Goals</button>');
+				$("#Graphs").html('<button id = "graphs_button" onclick = "view_graphs()">Progress Graphs</button>');
 				$("#Diary").html(array['username'] + "'s Food Journal");
 				$("#search_field_div").html("<br><br>Search for a food:<br><input id = 'search_field' type = 'text' value = 'Search for Food'/><button id = 'search_button' onclick = 'search(false)'>Search</button><button id = 'add_food_button' onclick = 'add_food()'>Add Food to Database</button>");
 				set_on_clicks();
@@ -112,7 +117,7 @@ function create_acc(){
 	var p1_edit = false;
 	var p2_edit = false;
 	var acc_change = false;
-	
+	cur_day = 0;
 	$("#results").html("");
 	$("#login").html("");
 	$("#Diary").html("<label style = 'font-weight:bold'>Create Account </label><br>");
@@ -323,6 +328,7 @@ function create_acc_submit()
 				$("#search_field_div").html("<br><br>Search for a food:<br><input id = 'search_field' type = 'text' value = 'Search for Food'/><button id = 'search_button' onclick = 'search(false)'>Search</button><button id = 'add_food_button' onclick = 'add_food()'>Add Food to Database</button>");
 				set_on_clicks();
 				$("#login_results").html(array['text']);
+				cur_day = 0;
 			}else
 			{
 				$("#login_results").css("color", "red");
@@ -344,7 +350,7 @@ function logout()
 	results = document.cookie.split('|');
 	var username = results[1];
 	var long_num = results[0];
-	
+	cur_day = 0;
 	$.ajax({
 		method: 'get',
 		url: '../PHP/cookie_logout.php',
@@ -367,8 +373,10 @@ function logout()
 	$("#login").html('Login: <div id = "login_results"></div><input id = "username_login" type = "text" value = "username"/><input id = "password_login" type = "password" value = "password"/><button id = "login_button" onclick = "login()">Login</button><button id = "create_acc_button" onclick = "create_acc()">Create Account</button>');
 	$("#Diary").html("");
 	$("#Goals").html("");
+	$("#Graphs").html("");
 	$("Daily_Intake_Table").html("");
 	document.cookie = "";
+	set_on_clicks();
 }
 
 //creates and stores a cookie in the database.
@@ -397,7 +405,8 @@ function cookie_login_attempt()
 		url: '../PHP/cookie_login.php',
 		data: {
 			'username' : username,
-			'long_num' : long_num
+			'long_num' : long_num,
+			'day' : cur_day
 		},
 		success: function(data){
 			var array = jQuery.parseJSON(data);
@@ -411,6 +420,8 @@ function cookie_login_attempt()
 				$("#login").html('<button id = "logout_button" onclick = "logout()">Logout</button>');
 				$("#Diary").html(array['username'] + "'s Food Journal\n" + array['results']);
 				$("#Goals").html('<button id = "goals_button" onclick = "view_goals()">Goals</button>');
+				$("#Graphs").html('<button id = "graphs_button" onclick = "view_graphs()">Progress Graphs</button>');
+				$("#graphs_button").css("width", "200px");
 				$("#search_field_div").html("<br><br>Search for a food:<br><input id = 'search_field' type = 'text' value = 'Search for Food'/><button id = 'search_button' onclick = 'search(false)'>Search</button><button id = 'add_food_button' onclick = 'add_food()'>Add Food to Database</button>");
 				set_on_clicks();
 			}
@@ -454,7 +465,8 @@ function add_entry(food_NDB_No)
 		data: {
 			'NDB_No' : food_NDB_No,
 			'username': cur_user,
-			'weight' : weight
+			'weight' : weight,
+			'day' : cur_day
 		},
 		success: function(data){			
 			if(data)
@@ -473,7 +485,8 @@ function diary_update()
 			method: 'get',
 			url: '../PHP/update_diary.php',
 			data: {
-				'username' : cur_user
+				'username' : cur_user,
+				'day' : cur_day
 			},
 			success: function(data){
 				$("#Diary").html(data);
@@ -491,7 +504,8 @@ function remove_entry(iddiary_entry)
 		method: 'get',
 		url: '../PHP/remove_entry.php',
 		data: {
-			'id' : iddiary_entry
+			'id' : iddiary_entry,
+			'day' : cur_day
 		},
 		success:function(data){
 			if(data)
@@ -543,12 +557,27 @@ function view_goals()
 		},
 		success: function(data){
 			$("#Diary").html(cur_user + "'s Goals: <br>" + data);
-			$("#Diary").append("<div id = 'updated_goals_notify'></div>");
+			$("#Diary").append("<div id = 'updated_goals_notify'><br></div>");
+			$("#Diary").append("<div id = 'validate_goals_div'></div>");
+			if(($("#goal_calories").val() != "No Goal Set.") && ($("#goal_protein").val() != "No Goal Set.") && ($("#goal_fat").val() != "No Goal Set.") && ($("#goal_carbs").val() != "No Goal Set."))
+			{
+					validate_goals();
+			}
 		}
 	});
 
 }
-
+function validate_goals()
+{
+			if($("#goal_calories").val() != ($("#goal_protein").val()*4 + $("#goal_fat").val()*9 + $("#goal_carbs").val()*4))
+			{
+				$("#validate_goals_div").css("color", "red");
+				$("#validate_goals_div").html("Goals for protein, fat, and carbohydrates do not add up to total calories. (If this is intentional, please ignore this message.)");
+			}else
+			{
+				$("#validate_goals_div").html("");
+			}
+}
 function set_protein_goal(number_in_grams)
 {
 	$.ajax({
@@ -560,11 +589,23 @@ function set_protein_goal(number_in_grams)
 			'user' : cur_user
 		},
 		success: function(data){
-			if(data)
+			var array = jQuery.parseJSON(data);
+			if(array['status'] == "good")
 			{
+				$("#updated_goals_notify").css("color", "green");
 				$("#updated_goals_notify").html("Successfully updated protein goal.");
+				$("#updated_goals_notify").html();
+				if(array['percentage'])
+				{
+					$("#goal_protein").val(array['updated_goal']);
+				}
+				if(($("#goal_calories").val() != "No Goal Set.") && ($("#goal_protein").val() != "No Goal Set.") && ($("#goal_fat").val() != "No Goal Set.") && ($("#goal_carbs").val() != "No Goal Set."))
+				{
+					validate_goals();
+				}
 			}else
 			{
+				$("#updated_goals_notify").css("color", "red");
 				$("#updated_goals_notify").html("Failed to update protein goal.");
 			}
 		}
@@ -582,11 +623,22 @@ function set_carb_goal(number_in_grams)
 			'user' : cur_user
 		},
 		success: function(data){
-			if(data)
+			var array = jQuery.parseJSON(data);
+			if(array['status'] == "good")
 			{
+				$("#updated_goals_notify").css("color", "green");
 				$("#updated_goals_notify").html("Successfully updated carbohydrate goal.");
+				if(array['percentage'])
+				{
+					$("#goal_carbs").val(array['updated_goal']);
+				}
+				if(($("#goal_calories").val() != "No Goal Set.") && ($("#goal_protein").val() != "No Goal Set.") && ($("#goal_fat").val() != "No Goal Set.") && ($("#goal_carbs").val() != "No Goal Set."))
+				{
+					validate_goals();
+				}
 			}else
 			{
+				$("#updated_goals_notify").css("color", "red");
 				$("#updated_goals_notify").html("Failed to update carbohydrate goal.");
 			}
 		}
@@ -604,11 +656,22 @@ function set_fat_goal(number_in_grams)
 			'user' : cur_user
 		},
 		success: function(data){
-			if(data)
+			var array = jQuery.parseJSON(data);
+			if(array['status'] == "good")
 			{
+				$("#updated_goals_notify").css("color", "green");
 				$("#updated_goals_notify").html("Successfully updated fat goal.");
+				if(array['percentage'])
+				{
+					$("#goal_fat").val(array['updated_goal']);
+				}
+				if(($("#goal_calories").val() != "No Goal Set.") && ($("#goal_protein").val() != "No Goal Set.") && ($("#goal_fat").val() != "No Goal Set.") && ($("#goal_carbs").val() != "No Goal Set."))
+				{
+					validate_goals();
+				}
 			}else
 			{
+				$("#updated_goals_notify").css("color", "red");
 				$("#updated_goals_notify").html("Failed to update fat goal.");
 			}
 		}
@@ -626,11 +689,18 @@ function set_cal_goal(number)
 			'user' : cur_user
 		},
 		success: function(data){
-			if(data)
+			var array = jQuery.parseJSON(data);
+			if(array['status'] == "good")
 			{
+				$("#updated_goals_notify").css("color", "green");
 				$("#updated_goals_notify").html("Successfully updated calorie goal.");
+				if(($("#goal_calories").val() != "No Goal Set.") && ($("#goal_protein").val() != "No Goal Set.") && ($("#goal_fat").val() != "No Goal Set.") && ($("#goal_carbs").val() != "No Goal Set."))
+				{
+					validate_goals();
+				}
 			}else
 			{
+				$("#updated_goals_notify").css("color", "red");
 				$("#updated_goals_notify").html("Failed to update calorie goal.");
 			}
 		}
@@ -818,16 +888,6 @@ function add_food()
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
 
 function add_food_submit()
 {
@@ -1024,10 +1084,17 @@ function set_on_clicks()
 	$("#username_login").on("click", function(){
 			$(this).val("");
 			$(this).css("color", "black");
+			
 	});
 	$("#username_login").on("focus", function(){
 			$(this).val("");
 			$(this).css("color", "black");
+			$(this).keypress(function(e){
+			if(e.which == 13)
+			{
+				login("", "");
+			}
+		});
 	});
 	$("#password_login").on("click", function(){
 			$(this).val("");
@@ -1036,6 +1103,12 @@ function set_on_clicks()
 	$("#password_login").on("focus", function(){
 			$(this).val("");
 			$(this).css("color", "black");
+			$(this).keypress(function(e){
+			if(e.which == 13)
+			{
+				login("", "");
+			}
+		});
 	});
 	$("#search_field").on("click", function(){
 			if($(this).val() === "Search for Food")
@@ -1050,6 +1123,171 @@ function set_on_clicks()
 			$(this).val("");
 		}
 			$(this).css("color", "black");
+		$(this).keypress(function(e){
+			if(e.which == 13)
+			{
+				search();
+			}
+		});
 	});
 }
 
+function add_day()
+{
+	cur_day++;
+	diary_update();
+}
+
+function subtract_day()
+{
+	cur_day--;	
+	diary_update();
+}
+
+function view_graphs()
+{
+	$("#results").html("");
+	$("#Goals").html('<button id = "goals_button" onclick = "view_goals()">Goals</button>');
+	$("#goals_button").attr('onclick', 'cookie_login_attempt()');
+	$("#goals_button").text('Diary');
+	$("#Diary").html("Weekly <input id = 'weekly' value = 'weekly' type = 'checkbox'>   Monthly <input id = 'monthly' value = 'monthly' type = 'checkbox'><br>");
+	$("#Diary").append("Calories <input id = 'calorie_graph' value = 'calorie' type = 'checkbox'>		Fat <input id = 'fat_graph' value = 'fat' type = 'checkbox'>		Carbohydrates <input id = 'carbs_graph' value = 'carbs' type = 'checkbox'>		Protein <input id = 'protein_graph' value = 'protein' type = 'checkbox'>");
+	$("#Diary").append("<br><button id = 'graph_submit' onclick = 'graph_validate()'>Graph</button>");
+	$("#Diary").append("<br><div id = 'graph_error_time_scale'><br></div>");
+	$("#Diary").append("<br><div id = 'graph_error_type'><br></div>");
+	$("#Diary").append("<br><div id = 'graph_error'><br></div>");
+	$("#Graphs").html("");
+	$("#search_field_div").html("");
+	
+	
+}
+
+function graph_validate()
+{
+	var time_scale_good = false;
+	var type_good = false;
+	//'graph($('#weekly').val(), $('#monthly').val(), $('#calorie_graph').val(), $('#fat_graph').val(), $('#carbs_graph').val(), $('#protein_graph').val())'>Graph</button>"
+	if($("#weekly").is(':checked') && $("#monthly").is(':checked'))
+	{
+		$("#graph_error_time_scale").css("color", "red");
+		$("#graph_error_time_scale").html("Please pick between weekly OR monthly, cannot graph both.");
+		time_scale_good = false;
+	}else
+	{
+		$("#graph_error_time_scale").html("<br>");
+		time_scale_good = true;
+	}
+	
+	if(($("#calorie_graph").is(':checked') && ($("#fat_graph").is(':checked') || $("#carbs_graph").is(':checked') || $("#protein_graph").is(':checked'))) ||
+	($("#fat_graph").is(':checked') && ($("#calorie_graph").is(':checked') || $("#carbs_graph").is(':checked') || $("#protein_graph").is(':checked'))) ||
+	($("#carbs_graph").is(':checked') && ($("#calorie_graph").is(':checked') || $("#fat_graph").is(':checked') || $("#protein_graph").is(':checked'))) ||
+	($("#protein_graph").is(':checked') && ($("#calorie_graph").is(':checked') || $("#fat_graph").is(':checked') || $("#carbs_graph").is(':checked'))))
+	{
+		$("#graph_error_type").css("color", "red");
+		$("#graph_error_type").html("Please select one type of nutrient to graph.");
+		type_good = false;
+	}else
+	{
+		$("#graph_error_type").html("<br>");
+		var type_good = true;
+	}
+	
+	if(($("#weekly").is(':checked') || $("#monthly").is(':checked')) && ( $("#calorie_graph").is(':checked') || $("#fat_graph").is(':checked') || $("#carbs_graph").is(':checked') || $("#protein_graph").is(':checked')) )
+	{
+		$("#graph_error").html("<br>");
+		graph();
+	}else
+	{
+		$("#graph_error").css("color", "red");
+		$("#graph_error").html("Please select a time scale and a nutrient to graph.");
+	}
+}
+
+function graph()
+{
+	var time = "";
+	var nutrient = "";
+	
+	if($("#weekly").is(":checked"))
+	{
+		time = "weekly";
+	}else if ($("#monthly").is(':checked'))
+	{
+		time = "monthly";
+	}
+	if($("#calorie_graph").is(":checked"))
+	{
+		nutrient = "calories";
+	}else if($("#fat_graph").is(":checked"))
+	{
+		nutrient = "fat";
+	}else if($("#carbs_graph").is(":checked"))
+	{
+		nutrient = "carbs";
+	}else if($("#protein_graph").is(":checked"))
+	{
+		nutrient = "protein";
+	}
+	//CREATE CANVAS BEFORE AJAX
+	
+	$("#Graphs").html('<canvas id = "nut_graph" width = "400" height = "400"></canvas>');
+	
+	$.ajax({
+				method: 'get',
+				url: '../PHP/get_graph_data.php',
+				data: {
+					'nutrient' : nutrient,
+					'time_scale' : time,
+					'username' : cur_user
+				},
+				success: function(data){
+					var data_array = jQuery.parseJSON(data);		
+					$("#graph_error").html("<br>");
+					$("#graph_error_type").html("<br>");
+					$("#graph_error_time_scale").html("<br>");
+					if(time == "weekly")
+					{
+						var weekly_date_array = [data_array['Monday'], data_array['Tuesday'], data_array['Wednesday'], data_array['Thursday'], data_array['Friday'], data_array['Saturday'], data_array['Sunday'] ];
+						var graph_data = {
+							labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+							datasets: [
+								{
+									fillColor: "rgba(220,220,220,0.2)",
+			           				strokeColor: "rgba(220,220,220,1)",
+			           				pointColor: "rgba(220,220,220,1)",
+			            			pointStrokeColor: "#fff",
+			            			pointHighlightFill: "#fff",
+			            			pointHighlightStroke: "rgba(220,220,220,1)",
+			            			data: weekly_date_array
+	            				}
+	            			]
+						};
+						var ctx = $("#nut_graph").get(0).getContext("2d");
+						var nutrient_chart = new Chart(ctx).Line(graph_data);
+					}else if(time == "monthly")
+					{
+						var monthly_date_array = [data_array[0], data_array[1], data_array[2], data_array[3], data_array[4], data_array[5], data_array[6], data_array[7], data_array[8], data_array[9], data_array[10], data_array[11], data_array[12],
+						data_array[13], data_array[14], data_array[15], data_array[16], data_array[17], data_array[18], data_array[19], data_array[20], data_array[21], data_array[22], data_array[23], data_array[24], data_array[25],
+						data_array[26], data_array[27], data_array[28], data_array[29], data_array[30]];
+						var graph_data = {
+							labels: ["1","5","10","15","20","25","30"],
+							datasets: [
+								{
+									fillColor: "rgba(220,220,220,0.2)",
+			           				strokeColor: "rgba(220,220,220,1)",
+			           				pointColor: "rgba(220,220,220,1)",
+			            			pointStrokeColor: "#fff",
+			            			pointHighlightFill: "#fff",
+			            			pointHighlightStroke: "rgba(220,220,220,1)",
+			            			data: monthly_date_array
+	            				}
+	            			]
+						};
+						var ctx = $("#nut_graph").get(0).getContext("2d");
+						var nutrient_chart = new Chart(ctx).Line(graph_data);
+					}
+					
+				}
+			});
+			
+}
