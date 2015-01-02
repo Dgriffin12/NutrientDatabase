@@ -145,7 +145,7 @@
 		$i = 0;
 		for($i = 0; $i < 31; $i++)
 		{
-			if($i < 10)
+			if($i < 9)
 			{
 				$leading_num = "0";
 			}else
@@ -156,9 +156,9 @@
 			$Sum = 0;
 			while($row = mysqli_fetch_array($result))
 			{
-				$result = mysqli_query($con, "SELECT Nutr_Val FROM nut_data WHERE NDB_No LIKE '" . $row['NDB_No'] . "' AND Nutr_No LIKE '" . $Nutr_No ."'");
-				$row2 = mysqli_fetch_array($result);
-				$Sum += $row2['Nutr_Val']*$row['weight'] / 100;
+				$result_summer = mysqli_query($con, "SELECT Nutr_Val FROM nut_data WHERE NDB_No LIKE '" . $row['NDB_No'] . "' AND Nutr_No LIKE '" . $Nutr_No ."'");
+				$row2 = mysqli_fetch_array($result_summer);
+				$Sum += $row2['Nutr_Val']*($row['weight'] / 100);
 			}
 			$response[$i] = $Sum;
 		}

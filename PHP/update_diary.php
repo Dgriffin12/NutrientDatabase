@@ -26,12 +26,8 @@
 	
 	echo "<button id = 'subtract_day' onclick = 'subtract_day()' >Previous Day</button>
 	" . " " . $date->format('F j, Y') . " " . "
-	<button id = 'add_day' onclick = 'add_day()'>Next Day</button>
-	<table id = 'Diary_Entries_Table' border = '1'>
-	<tr>
-	<th>Food Diary Entries: </th>
+	<button id = 'add_day' onclick = 'add_day()'>Next Day</button>";
 	
-	</tr>";
 	$total_fat = 0;
 	$total_protein = 0;
 	$total_calories = 0;
@@ -46,11 +42,11 @@
 	$carbs_less_goal = 0;
 	while($result_first && $row = mysqli_fetch_array($result_first)) 
 	{
- 	 	echo "<tr>";
+ 	 	/*echo "<tr>";
 		$result = mysqli_query($con,'SELECT Long_Desc FROM food_des WHERE NDB_No LIKE "' . $row['NDB_No'] . '"');
 		$row2 = mysqli_fetch_array($result);
   		echo "<td>" . $row2['Long_Desc'] . " </td><td><button onclick = " . '"remove_entry(' . $row['iddiary_entry'] . ')"> Remove Entry </></td>';
-  		echo "</tr>";
+  		echo "</tr>";*/
 		$result = mysqli_query($con,'SELECT Nutr_Val FROM nut_data WHERE NDB_No LIKE "' . $row['NDB_No'] . '" AND Nutr_No LIKE "204"');
 		$row2 = mysqli_fetch_array($result);	
 		if($row2)
@@ -99,7 +95,8 @@
 	$carbs_percent;
 	$protein_percent;
 	
-	echo "</table>";
+	//echo "</table>";
+	//echo "<br>";
 	echo "<table id = 'Daily_Intake_Table' border = '2'><tr><th>Nutrients</th><th>Daily Totals</th><th> Daily Goal</th><th>Amount Left</th></tr>";
 	echo "<tr><td>Calories </td><td> " . number_format($total_calories, 0) . "  </td><td> " . $calories_goal . " </td>";
 	if($calories_less_goal >= 0)
@@ -107,7 +104,7 @@
 		echo "<td style = 'color:green'> " .  number_format($calories_less_goal, 0) . " </td></tr>";
 	}else
 	{
-		echo "<td style = 'color:red'> " .  number_format($calories_less_goal, 0) . " </td></tr>";
+		echo "<td style = 'color:orange'> " .  number_format($calories_less_goal, 0) . " </td></tr>";
 	}
 	echo "<tr><td>Fat </td><td> " . number_format($total_fat, 0) . "g  </td><td> " . $fat_goal . "g </td>";
 	
@@ -116,7 +113,7 @@
 		echo "<td style = 'color:green'> " . number_format($fat_less_goal, 0) . " </td></tr>";
 	}else
 	{
-		echo "<td style = 'color:red'> " . number_format($fat_less_goal, 0) . " </td></tr>";
+		echo "<td style = 'color:orange'> " . number_format($fat_less_goal, 0) . " </td></tr>";
 	}
 	
 	echo "<tr><td>Carbs</td><td> " . number_format($total_carbs, 0) . "g  </td><td> " . $carb_goal . "g </td>";
@@ -125,7 +122,7 @@
 		echo "<td style = 'color:green'> " . number_format($carbs_less_goal, 0) . " </td></tr>";
 	}else
 	{
-		echo "<td style = 'color:red'> " . number_format($carbs_less_goal, 0) . " </td></tr>";
+		echo "<td style = 'color:orange'> " . number_format($carbs_less_goal, 0) . " </td></tr>";
 	}
 	
 	echo "<tr><td>Protein </td><td> " . number_format($total_protein, 0) . "g  </td><td> " . $protein_goal . "g </td>";
@@ -134,13 +131,12 @@
 		echo "<td style = 'color:green'>  " . number_format($protein_less_goal, 0) . " </td></tr>";
 	}else
 	{
-		echo "<td style = 'color:red'>  " . number_format($protein_less_goal, 0) . " </td></tr>";
+		echo "<td style = 'color:orange'>  " . number_format($protein_less_goal, 0) . " </td></tr>";
 	}
 	
 	
 	
 	
 	echo "</table>";
-	
 	mysqli_close($con);
 ?>
