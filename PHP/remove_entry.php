@@ -10,7 +10,7 @@
 	
 	$id = $_GET['id'];
 	
-	$result = mysqli_query($con, "DELETE FROM diary_entry WHERE iddiary_entry = '" . $id . "'");
+	$result = mysqli_query($con, "DELETE FROM diary_entry WHERE id = '" . $id . "'");
 	if($result)
 	{
 		echo true;

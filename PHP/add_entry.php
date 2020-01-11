@@ -42,6 +42,7 @@
 	}else
 	{
 		echo false;
+		//echo "user: " . $username . " NDB_NO: " . $food_NDB_No . " Date: " . $date_string . " Weight: " . $weight;
 	}
 	mysqli_close($con);
 ?>

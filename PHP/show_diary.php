@@ -85,7 +85,7 @@
 			echo "<td>0</td>";
 		}
 		//Food Description and Button
-  		echo "<td>" . $row2['Long_Desc'] . " </td><td><button onclick = " . '"remove_entry(' . $row['iddiary_entry'] . ')"> Remove Entry </></td>';
+  		echo "<td>" . $row2['Long_Desc'] . " </td><td><button onclick = " . '"remove_entry(' . $row['id'] . ')"> Remove Entry </></td>';
   		echo "</tr>";
 	}
 

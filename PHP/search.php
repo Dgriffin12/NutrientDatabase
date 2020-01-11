@@ -33,20 +33,20 @@ if($row = mysqli_fetch_array($result))
 	  {
 	  	if($inte % 2 == 0)
 		{
-	  		echo "<td width = '550' style = 'background-color: #DDDDDD' class = 'long_desc_data'>" . $row['Long_Desc'] . "</td><td><button onclick = " . '"info(\'' . $row['NDB_No'] . '\', 0)">' . "Nutrition</button></td><td><button onclick = " . '"add_entry(\'' . $row['NDB_No'] . '\')"> Quick Add </button></td>';			
+	  		echo "<td width = '550' style = 'background-color: #DDDDDD' class = 'long_desc_data'>" . $row['Long_Desc'] . "</td><td><button onclick = " . '"info(\'' . $row['NDB_No'] . '\', 0)">' . "Impact</button></td><td><button onclick = " . '"add_entry(\'' . $row['NDB_No'] . '\')"> Quick Add </button></td>';			
 		}else 
 		{
-			echo "<td width = '550'class = 'long_desc_data'>" . $row['Long_Desc'] . "</td><td><button onclick = " . '"info(\'' . $row['NDB_No'] . '\', 0)">' . "Nutrition</button></td><td><button onclick = " . '"add_entry(\'' . $row['NDB_No'] . '\')"> Quick Add </button></td>';				
+			echo "<td width = '550'class = 'long_desc_data'>" . $row['Long_Desc'] . "</td><td><button onclick = " . '"info(\'' . $row['NDB_No'] . '\', 0)">' . "Impact</button></td><td><button onclick = " . '"add_entry(\'' . $row['NDB_No'] . '\')"> Quick Add </button></td>';				
 		}
 	  }else
 	  {
 	  	
 		if($inte % 2 == 0)
 		{
-			echo "<td width = '650' style = 'background-color: #DDDDDD'>" . $row['Long_Desc'] . "</td><td><button onclick = " . '"info(\'' . $row['NDB_No'] . '\', 0)">' . "Nutrition</button></td>";	
+			echo "<td width = '650' style = 'background-color: #DDDDDD'>" . $row['Long_Desc'] . "</td><td><button onclick = " . '"info(\'' . $row['NDB_No'] . '\', 0)">' . "Impact</button></td>";	
 		}else
 		{
-			echo "<td width = '650'>" . $row['Long_Desc'] . "</td><td><button onclick = " . '"info(\'' . $row['NDB_No'] . '\', 0)">' . "Nutrition</button></td>";	
+			echo "<td width = '650'>" . $row['Long_Desc'] . "</td><td><button onclick = " . '"info(\'' . $row['NDB_No'] . '\', 0)">' . "Impact</button></td>";	
 		}
 	  }       
 	  echo "</tr>";	 

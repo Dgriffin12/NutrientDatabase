@@ -103,7 +103,6 @@ function login(acc, pw){
 		username = acc;
 		password = pw;
 	}
-
 	$.ajax({
 		method: 'get',
 		url: '../PHP/login.php',
@@ -396,7 +395,7 @@ function logout()
 	diary_update();
 	$("#results").html("");
 	$("#notify").html("");
-	$("#login").html('Login: <div id = "login_results"></div><input id = "username_login" type = "text" value = "username"/><input id = "password_login" type = "password" value = "password"/><button id = "login_button" onclick = "login(\'\',\'\')">Login</button><button id = "create_acc_button" onclick = "create_acc()">Create Account</button>');
+	$("#login").html('<div id = "login_results"></div><input id = "username_login" type = "text" value = "username"/><input id = "password_login" type = "password" value = "password"/><button id = "login_button" onclick = "login(\'\',\'\')">Login</button><button id = "create_acc_button" onclick = "create_acc()">Create Account</button>');
 	$("#Diary").html("");
 	$("#Goals").html("");
 	$("#Graphs").html("");
@@ -423,7 +422,7 @@ function create_and_store_cookie()
 function cookie_login_attempt()
 {
 	$("#results").html("");
-	results = document.cookie.split('|');
+	var results = document.cookie.split('|');
 	var username = results[1];
 	var long_num = results[0];
 	//$("#results2").html(username + " " + long_num);
@@ -435,27 +434,30 @@ function cookie_login_attempt()
 			'long_num' : long_num,
 			'day' : cur_day
 		},
-		success: function(data){
-			var array = jQuery.parseJSON(data);
-			if(array['status'] == "good")
+		success: function(data){	
+			var array;
+			if(data)
 			{
-				logged_in = true;
-				cur_user = array['username'];
-				diary_update();
-				$("#notify").css("color", "blue");
-				$("#notify").html("Logged in as "+ array['username'] + '.');
-				$("#login").html('<button id = "logout_button" onclick = "logout()">Logout</button>');
-				$("#Goals").html('<button id = "goals_button" onclick = "view_goals()">Goals</button>');
-				$("#Graphs").html('<button id = "graphs_button" onclick = "view_graphs()">Progress Graphs</button><button id = "show_diary_button" onclick = "show_diary()">Show Diary</button>');
-				diary_view = false;
-				$("#Diary").html("");
-				$("#Diary").remove("table");
-				$("#graphs_button").css("width", "200px");
-				$("#show_diary_button").css("width", "200px");
-				$("#search_field_div").html("<br><br>Search for a food:<br><input id = 'search_field' type = 'text' value = 'Search for Food'/><button id = 'search_button' onclick = 'search(false)'>Search</button><button id = 'add_food_button' onclick = 'add_food()'>Add Food to DB</button>");
-				set_on_clicks();
-			}
-			
+				var array = jQuery.parseJSON(data);
+				if(array['status'] == "good")
+				{
+					logged_in = true;
+					cur_user = array['username'];
+					diary_update();
+					$("#notify").css("color", "blue");
+					$("#notify").html("Logged in as "+ array['username'] + '.');
+					$("#login").html('<button id = "logout_button" onclick = "logout()">Logout</button>');
+					$("#Goals").html('<button id = "goals_button" onclick = "view_goals()">Goals</button>');
+					$("#Graphs").html('<button id = "graphs_button" onclick = "view_graphs()">Progress Graphs</button><button id = "show_diary_button" onclick = "show_diary()">Show Diary</button>');
+					diary_view = false;
+					$("#Diary").html("");
+					$("#Diary").remove("table");
+					$("#graphs_button").css("width", "200px");
+					$("#show_diary_button").css("width", "200px");
+					$("#search_field_div").html("<br><br>Search for a food:<br><input id = 'search_field' type = 'text' value = 'Search for Food'/><button id = 'search_button' onclick = 'search(false)'>Search</button><button id = 'add_food_button' onclick = 'add_food()'>Add Food to DB</button>");
+					set_on_clicks();
+				}
+			}			
 		}
 	});
 }
@@ -489,6 +491,7 @@ function add_entry(food_NDB_No)
 	{
 		weight = '0';
 	}
+	//alert("NBD_NO: " + food_NDB_No + " User: " + cur_user + " Weight: " + weight + " Day:" + cur_day);
 	$.ajax({
 		method: 'get',
 		url: '../PHP/add_entry.php',
@@ -498,9 +501,10 @@ function add_entry(food_NDB_No)
 			'weight' : weight,
 			'day' : cur_day
 		},
-		success: function(data){			
+		success: function(data){		
 			if(data)
 			{
+				//alert(data);
 				diary_update();	
 			}
 		}

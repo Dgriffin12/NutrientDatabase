@@ -12,7 +12,7 @@ label{
 
 body{
 	text-align:center;
-    background-image: url('../img/Logo_real3.png');
+    background-image: url('../img/Diet Impact Background.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size:100%;
@@ -22,33 +22,38 @@ td{
 }
 #login{
 	margin:0 auto;
+	text-align:right;
+	color:black;
+	text-shadow:1px 1px #87ceeb;
+}
+#login_text{
+  display:inline-block;
 }
 #Goals{
 	margin:0 auto;
 }
 #Diary{
 	margin:0 auto;
+	color:black;
+	font-weight:bold;
 }
 #search_field_div{
 	margin:0 auto;
-	color:#BDFCC9;
+	color:black;
+	text-shadow:1px 1px #87ceeb;
 }
 th{
 	font-family: georgia;
-	background: -webkit-gradient(linear, center top, center bottom, from(#BDFCC9), to(#FFFFFF0));
-	background: -webkit-linear-gradient(#BDFCC9, #FFFFFF);
-	background: -moz-linear-gradient(#BDFCC9, #FFFFFF);
-	background: -o-linear-gradient(#BDFCC9, #FFFFFF);
-	background: -ms-linear-gradient(#BDFCC9, #FFFFFF);
-	background: linear-gradient(#BDFCC9, #FFFFFF);
+	background: -webkit-gradient(linear, center top, center bottom, from(#87ceeb), to(#FFFFFF0));
+	background: -webkit-linear-gradient(#87ceeb, #FFFFFF);
+	background: -moz-linear-gradient(#87ceeb, #FFFFFF);
+	background: -o-linear-gradient(#87ceeb, #FFFFFF);
+	background: -ms-linear-gradient(#87ceeb, #FFFFFF);
+	background: linear-gradient(#87ceeb, #FFFFFF);
 }
 div{
-	color:#BDFCC9;
-	text-shadow:
-	-1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+	color:black;
+	font-weight:bold;
 }
 button{
 	color:black;
@@ -75,27 +80,29 @@ table{
 #username_login{
 	margin-top:0px;
 	margin-bottom:0px;
+	width: 150px;
 }
 #password_login{
 	margin-top:0px;
 	margin-bottom:0px;
+	width: 150px;
 }
 button{
 	margin-top:3px;
 	margin-bottom:5px;
 	height:25px;
-	width:110px;
+	width:120px;
 	color: black;
 	font-family: georgia;
 	font-style: bold;
-	font-size: 15px;
+	font-size: 12px;
 	letter-spacing: 0.07em;
-	background: -webkit-gradient(linear, center top, center bottom, from(#BDFCC9), to(#FFFFFF0));
-	background: -webkit-linear-gradient(#BDFCC9, #FFFFFF);
-	background: -moz-linear-gradient(#BDFCC9, #FFFFFF);
-	background: -o-linear-gradient(#BDFCC9, #FFFFFF);
-	background: -ms-linear-gradient(#BDFCC9, #FFFFFF);
-	background: linear-gradient(#BDFCC9, #FFFFFF);
+	background: -webkit-gradient(linear, center top, center bottom, from(#87ceeb), to(#FFFFFF0));
+	background: -webkit-linear-gradient(#87ceeb, #FFFFFF);
+	background: -moz-linear-gradient(#87ceeb, #FFFFFF);
+	background: -o-linear-gradient(#87ceeb, #FFFFFF);
+	background: -ms-linear-gradient(#87ceeb, #FFFFFF);
+	background: linear-gradient(#87ceeb, #FFFFFF);
 }
 #graphs_button {
 	width: 200px;
@@ -103,6 +110,8 @@ button{
 input{
 	margin-top:0px;
 	margin-bottom:0px;
+	font-family: georgia;
+	font-size:12px;
 }
 #title{
 	height:188px;
@@ -117,7 +126,7 @@ input{
     1px -1px 0 #000,
     -1px 1px 0 #000,
     1px 1px 0 #000;
-	color:#BDFCC9;
+	color:#87ceeb;
 }
 
 #search_table{
@@ -144,4 +153,18 @@ input{
   			width: 650px;
   	}
 }
+
+#PAGE_TITLE{
+	margin-top: 5%;
+	color:black;
+	font-size: 36px;
+	font-family: Stencil Std, fantasy;
+}
+
+#PAGE_DESCRIPTION{
+	margin-top:1%;
+	color:black;
+	font-size: 18px;
+}
+
 
